@@ -1,0 +1,2 @@
+idades <- c(40, 42, 45)
+modelIpvaPib <- lm(ipva ~ pib)
