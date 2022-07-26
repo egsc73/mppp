@@ -1,2 +1,7 @@
 idades <- c(40, 42, 45)
 modelIpvaPib <- lm(ipva ~ pib)
+str(idades)
+class(idades)
+summary(idades)
+class(modelIpvaPib)
+summary(modelIpvaPib)
