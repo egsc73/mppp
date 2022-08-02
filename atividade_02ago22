@@ -1,0 +1,5 @@
+# CRIANDO SEQUENCIAS COM CARACTERES E PALAVRAS
+letras <- c("a","b","c")
+nomes <- c("Ana", "Bianca", "Carol")
+idades <- c(37, 45, 49)
+dados <- data.frame(letras, nomes, idades)
