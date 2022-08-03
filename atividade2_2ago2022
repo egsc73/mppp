@@ -7,13 +7,13 @@ pibpebruto <- read.xlsx('Produto Interno Bruto valores correntes Brasil Grandes 
                         # link para arquivo-fonte: https://www.dropbox.com/scl/fi/4evpxuslvx1sw4jjh7ki3/Produto-Interno-Bruto-valores-correntes-Brasil-Grandes-Regioes-e-Unidades-da-Federacao-2010a2019.xlsx?dl=0&rlkey=eik2b0ul6lw0s9uexe7e5o7y2
 
 # recorte do pib brasileiro 2010 a 2019
-pibpe = pibpebruto[-(1:15),]
-pibpe = pibpe[-(2:19),]
-pibpe = pibpe[,-(1)]
-PibPE = t(pibpe)
+pibpe <- pibpebruto[-(1:15),]
+pibpe <- pibpe[-(2:19),]
+pibpe <- pibpe[,-(1)]
+PibPE <- t(pibpe) # transpondo o resultado (de linha para coluna)
 colnames(PibPE) <- c("PibPE")
 summary(PibPE)
-sdPibPE <- sd(PibPE)
-VarPibPE <- var(PibPE)
+sdPibPE <- sd(PibPE) # calcula desvio-padrão da série
+VarPibPE <- var(PibPE) # calcula variância
 cvPibPE <- (sdPibPE/mean(PibPE)) # calcula coeficente de variação (desvio-padrão divido pela média)
 View(cvPibPE) # 0.2177031 - Indica um coeficiente de variação de 21,77%
