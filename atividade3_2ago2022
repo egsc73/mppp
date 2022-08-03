@@ -1,5 +1,6 @@
 # script aula 02 de agosto de 2022
 
+if(!require(openxlsx)) install.packages("openxlsx") # Read, Write and Edit xlsx Files
 pibpebruto <- read.xlsx('Produto Interno Bruto valores correntes Brasil Grandes Regioes e Unidades da Federacao 2010a2019.xlsx', 
                         sheet = "Tabela1", colNames = TRUE) 
                         # link para arquivo-fonte: https://www.dropbox.com/scl/fi/4evpxuslvx1sw4jjh7ki3/Produto-Interno-Bruto-valores-correntes-Brasil-Grandes-Regioes-e-Unidades-da-Federacao-2010a2019.xlsx?dl=0&rlkey=eik2b0ul6lw0s9uexe7e5o7y2
