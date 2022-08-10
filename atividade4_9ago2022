@@ -1,30 +1,65 @@
-# EXERCICIOS DA AULA DE 09 DE AGOSTO DE 2022
+# EXERCÍCIOS DA AULA DE 09 DE AGOSTO DE 2022
 # PROFESSOR HUGO AUGUSTO
 
-if(!require(openxlsx)) install.packages("openxlsx") # Read, Write and Edit xlsx Files
-pibpebruto <- read.xlsx('Produto Interno Bruto valores correntes Brasil Grandes Regioes e Unidades da Federacao 2010a2019.xlsx', 
-                        sheet = "Tabela1", colNames = TRUE) 
-# link para arquivo-fonte: https://www.dropbox.com/scl/fi/4evpxuslvx1sw4jjh7ki3/Produto-Interno-Bruto-valores-correntes-Brasil-Grandes-Regioes-e-Unidades-da-Federacao-2010a2019.xlsx?dl=0&rlkey=eik2b0ul6lw0s9uexe7e5o7y2
+getwd()
 
+# Direcionado o R para o Diretorio a ser trabalhado
+setwd('C:/Users/egome/Dropbox/Mestrado/Dados') # NO WINDOWS notebook
+setwd('C:/Users/0866/Dropbox/Mestrado/Dados') # NO WINDOWS notebook TCE
+setwd ("/home/eder/Dropbox/Mestrado/Dados") # NO LINUX notebook
 
-# recorte do pib brasileiro 2010 a 2019
-pibpe = pibpebruto[-(1:15),]
-pibpe = pibpe[-(2:19),]
-pibpe = pibpe[,-(1)]
-PibPE = t(pibpe)
-pibpe <- pibpebruto[-(1:15),]
-pibpe <- pibpe[-(2:19),]
-pibpe <- pibpe[,-(1)]
-PibPE <- t(pibpe) # transpondo o resultado (de linha para coluna)
-colnames(PibPE) <- c("PibPE")
-summary(PibPE)
-sdPibPE <- sd(PibPE)
-VarPibPE <- var(PibPE)
-desvpadPibPE <- sd(PibPE) # calcula desvio-padrão da série
-VarianciaPibPE <- t(var(PibPE))
-colnames(VarianciaPibPE) <- c("VarianciaPibPE")
-coefvariacaoPibPE <- (sdPibPE/mean(PibPE)) # calcula coeficente de variação (desvio-padrão divido pela média)
-sdvarcvPibPE <- cbind(desvpadPibPE,VarianciaPibPE,coefvariacaoPibPE)
-Footer
-© 2022 GitHub, Inc.
+# Conferindo se o diretorio de trabalho do R esta direcionado corretamente
+getwd()
 
+# Limpa o Ambiente Global
+rm(list=ls())
+
+# Instala pacote necessário
+if(!require(dplyr)) install.packages("dplyr") # Read Data Stored by 'Minitab', 'S', 'SAS', 'SPSS', 'Stata', 
+
+# Baixando e importando dados
+# carrega a base de snistros de transito do site da PCR
+
+sinistrosRecife2019Raw <- read.csv2('http://dados.recife.pe.gov.br/dataset/44087d2d-73b5-4ab3-9bd8-78da7436eed1/resource/3531bafe-d47d-415e-b154-a881081ac76c/download/acidentes-2019.csv', sep = ';', encoding = 'UTF-8')
+sinistrosRecife2020Raw <- read.csv2('http://dados.recife.pe.gov.br/dataset/44087d2d-73b5-4ab3-9bd8-78da7436eed1/resource/fc1c8460-0406-4fff-b51a-e79205d1f1ab/download/acidentes_2020-novo.csv', sep = ';', encoding = 'UTF-8')
+sinistrosRecife2021Raw <- read.csv2('http://dados.recife.pe.gov.br/dataset/44087d2d-73b5-4ab3-9bd8-78da7436eed1/resource/2caa8f41-ccd9-4ea5-906d-f66017d6e107/download/acidentes_2021-jan.csv', sep = ';', encoding = 'UTF-8')
+
+# o numero de variáveis não coincide, logo necessita remover colunas excedentes
+# nomes das variáveis não coincide, necessita uniformizar
+
+sinistrosRecife2020Raw2 <- subset(sinistrosRecife2020Raw,select = -c(descricao)) # remove coluna ausente nos dados de 2021
+sinistrosRecife2019Raw2 <- subset(sinistrosRecife2019Raw,select = -c(endereco_cruzamento,
+                                                                     numero_cruzamento,
+                                                                     referencia_cruzamento,
+                                                                     descricao)) # remove colunas
+
+sinistrosRecife2019Raw2 <- rename(sinistrosRecife2019Raw2, data = DATA)
+
+# junta as bases de dados com comando rbind (juntas por linhas)
+
+sinistrosRecifeRaw <- rbind(sinistrosRecife2019Raw2, sinistrosRecife2020Raw2, 
+                            sinistrosRecife2021Raw)
+
+# observa a estrutura dos dados
+str(sinistrosRecifeRaw)
+
+# modifica natureza do sinistro e sentido da via de texto para fator
+sinistrosRecifeRaw$natureza_acidente <- as.factor(sinistrosRecifeRaw$natureza_acidente)
+sinistrosRecifeRaw$sentido_via <- as.factor(sinistrosRecifeRaw$sentido_via)
+
+# cria função para substituir not available (na) por 0
+
+naZero <- function(x) {
+  x <- ifelse(is.na(x), 0, x)
+}
+
+# aplica a função naZero a todas as colunas de contagem
+sinistrosRecifeRaw[, 14:24] <- sapply(sinistrosRecifeRaw[, 14:24], naZero)
+
+# exporta em formato nativo do R
+saveRDS(sinistrosRecifeRaw, "bases_tratadas/sinistrosRecife.rds")
+
+# exporta em formato tabular (.csv) - padrão para interoperabilidade
+write.csv2(sinistrosRecifeRaw, "bases_tratadas/sinistrosRecife.csv")
+
+# local dos arquivos exportados : 
