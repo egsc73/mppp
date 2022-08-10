@@ -1,26 +1,30 @@
-# script aula 09 de agosto de 2022
+# EXERCICIOS DA AULA DE 09 DE AGOSTO DE 2022
+# PROFESSOR HUGO AUGUSTO
 
 if(!require(openxlsx)) install.packages("openxlsx") # Read, Write and Edit xlsx Files
 pibpebruto <- read.xlsx('Produto Interno Bruto valores correntes Brasil Grandes Regioes e Unidades da Federacao 2010a2019.xlsx', 
                         sheet = "Tabela1", colNames = TRUE) 
-                        # link para arquivo-fonte: https://www.dropbox.com/scl/fi/4evpxuslvx1sw4jjh7ki3/Produto-Interno-Bruto-valores-correntes-Brasil-Grandes-Regioes-e-Unidades-da-Federacao-2010a2019.xlsx?dl=0&rlkey=eik2b0ul6lw0s9uexe7e5o7y2
+# link para arquivo-fonte: https://www.dropbox.com/scl/fi/4evpxuslvx1sw4jjh7ki3/Produto-Interno-Bruto-valores-correntes-Brasil-Grandes-Regioes-e-Unidades-da-Federacao-2010a2019.xlsx?dl=0&rlkey=eik2b0ul6lw0s9uexe7e5o7y2
 
-#recorte do pib brasileiro 2010 a 2019
-pibne = pibpebruto[-(1:10),]
-pibne = pibne[-(10:24),]
 
-###
-
-pibnest = t(pibne) # como os dados estao em linha, estamos transpondo para coluna 
-
-colnames(pibnest) <- c("MA", "PI", "CE", "RN", "PB", "PE", "AL", "SE", "BA") # renomeando as colunas
-pibnest <- data.frame(pibnest[-(1),]) # convertendo em data-frame
-
-class(pibnest)
-
-# seleção de colunas
-pibnest %>% select(PE, PB, CE)  # seleciona as colunas com as séries dos PIBs de Pernambuco, Paraíba e Ceará de 2010 a 2019
-
-# ordenar casos
-arrange(pibnest,desc(pibnest)) # apresenta os dados do PIB anual de cada Estado em ordem descendente
+# recorte do pib brasileiro 2010 a 2019
+pibpe = pibpebruto[-(1:15),]
+pibpe = pibpe[-(2:19),]
+pibpe = pibpe[,-(1)]
+PibPE = t(pibpe)
+pibpe <- pibpebruto[-(1:15),]
+pibpe <- pibpe[-(2:19),]
+pibpe <- pibpe[,-(1)]
+PibPE <- t(pibpe) # transpondo o resultado (de linha para coluna)
+colnames(PibPE) <- c("PibPE")
+summary(PibPE)
+sdPibPE <- sd(PibPE)
+VarPibPE <- var(PibPE)
+desvpadPibPE <- sd(PibPE) # calcula desvio-padrão da série
+VarianciaPibPE <- t(var(PibPE))
+colnames(VarianciaPibPE) <- c("VarianciaPibPE")
+coefvariacaoPibPE <- (sdPibPE/mean(PibPE)) # calcula coeficente de variação (desvio-padrão divido pela média)
+sdvarcvPibPE <- cbind(desvpadPibPE,VarianciaPibPE,coefvariacaoPibPE)
+Footer
+© 2022 GitHub, Inc.
 
