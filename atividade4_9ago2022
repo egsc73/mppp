@@ -1,8 +1,6 @@
 # EXERCÍCIOS DA AULA DE 09 DE AGOSTO DE 2022
 # PROFESSOR HUGO AUGUSTO
 
-getwd()
-
 # Direcionado o R para o Diretorio a ser trabalhado
 setwd('C:/Users/egome/Dropbox/Mestrado/Dados') # NO WINDOWS notebook
 setwd('C:/Users/0866/Dropbox/Mestrado/Dados') # NO WINDOWS notebook TCE
@@ -62,4 +60,5 @@ saveRDS(sinistrosRecifeRaw, "bases_tratadas/sinistrosRecife.rds")
 # exporta em formato tabular (.csv) - padrão para interoperabilidade
 write.csv2(sinistrosRecifeRaw, "bases_tratadas/sinistrosRecife.csv")
 
-# local dos arquivos exportados : 
+# link para arquivos exportados :     https://www.dropbox.com/sh/45pci9mdu5vglzi/AABT2qPkwHa8Su7arlgscPL_a?dl=0
+
