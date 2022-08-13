@@ -1,0 +1,47 @@
+# EXERCÍCIOS DA AULA DE 09 DE AGOSTO DE 2022
+# PROFESSOR HUGO AUGUSTO
+
+
+# Direcionado o R para o Diretorio a ser trabalhado
+setwd('C:/Users/egome') # NO WINDOWS notebook ACER
+setwd('C:/Users/0866') # NO WINDOWS notebook TCE
+setwd ("/home/eder") # NO LINUX
+
+# Conferindo se o diretorio de trabalho do R esta direcionado corretamente
+getwd()
+
+# Limpa o Ambiente Global
+
+rm(list=ls())
+
+# carregando pacotes
+if(!require(dplyr)) install.packages("dplyr") # Read, Write and Edit xlsx Files
+if(!require(tidyverse)) install.packages("tidyverse") # Read, Write and Edit xlsx Files
+if(!require(funModeling)) install.packages("funModeling") # Read, Write and Edit xlsx Files
+if(!require(data.table)) install.packages("data.table") # Read, Write and Edit xlsx Files
+
+general_data <- fread("https://covid.ourworldindata.org/data/owid-covid-data.csv") # carrega dados de covid19 no mundo
+
+# vetor que identifica países do Mercosul
+mercosul_countries <-c("Argentina", "Brazil", "Bolivia", "Chile", "Colombia", 
+                         "Ecuador", "Guyana", "Paraguay", "Peru", "Suriname", 
+                         "Uruguay", "Venezuela") 
+
+# seleciona casos no vetor (recorte por linha), da lista criada
+mercosul <- general_data %>% filter(location %in% mercosul_countries) 
+
+# seleciona vetores (colunas)
+mercosul <- mercosul %>% select(location, new_cases, new_deaths) 
+
+
+status(mercosul) # estrutura dos dados (missing etc)
+freq(mercosul) # frequência das variáveis fator
+plot_num(mercosul) # exploração das variáveis numéricas
+profiling_num(mercosul) # estatísticas das variáveis numéricas
+
+# Pesquisar por registros errados (inputs negativos)
+mercosul %>% filter(new_cases < 0)
+
+# seleciona subconjunto conforme critério
+mercosul <- mercosul %>% filter(new_deaths>0, )
+
