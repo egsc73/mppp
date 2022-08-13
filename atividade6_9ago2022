@@ -1,0 +1,87 @@
+# EXERCÍCIOS DA AULA DE 09 DE AGOSTO DE 2022
+# PROFESSOR HUGO AUGUSTO
+
+
+# carregando pacotes
+if(!require(dplyr)) install.packages("dplyr") # Read, Write and Edit xlsx Files
+if(!require(tidyverse)) install.packages("tidyverse") # Read, Write and Edit xlsx Files
+if(!require(openxlsx)) install.packages("openxlsx") # Read, Write and Edit xlsx Files
+
+# Direcionado o R para o Diretorio a ser trabalhado
+setwd('C:/Users/egome/Dropbox/Mestrado/Dados') # NO WINDOWS notebook ACER
+setwd('C:/Users/0866/Dropbox/Mestrado/Dados') # NO WINDOWS notebook TCE
+setwd ("/home/eder/Dropbox/Mestrado/Dados") # NO LINUX
+
+setwd('C:/Users/egome') # NO WINDOWS notebook ACER
+setwd('C:/Users/0866') # NO WINDOWS notebook TCE
+setwd ("/home/eder") # NO LINUX
+
+# Conferindo se o diretorio de trabalho do R esta direcionado corretamente
+getwd()
+
+# Limpa o Ambiente Global
+
+rm(list=ls())
+
+# importando dados
+Empregos2018 <- read.csv2('Dropbox/Mestrado/Dados/empregos2018_pronto.csv', header = TRUE, sep = ',')
+
+# CORRIGINDO STRINGS 
+if(!require(stringr)) install.packages("stringr") # Simple, Consistent Wrappers for Common String Operations
+
+# Rotinas e funções úteis V 1.0
+# rm.accent - REMOVE ACENTOS DE PALAVRAS
+# Função que tira todos os acentos e pontuações de um vetor de strings.
+# Parâmetros:
+# str - vetor de strings que terão seus acentos retirados.
+# patterns - vetor de strings com um ou mais elementos indicando quais acentos deverão ser retirados.
+#            Para indicar quais acentos deverão ser retirados, um vetor com os símbolos deverão ser passados.
+#            Exemplo: pattern = c("´", "^") retirará os acentos agudos e circunflexos apenas.
+#            Outras palavras aceitas: "all" (retira todos os acentos, que são "´", "`", "^", "~", "¨", "ç")
+
+rm_accent <- function(str,pattern="all") {
+  if(!is.character(str))
+    str <- as.character(str)
+  pattern <- unique(pattern)
+  if(any(pattern=="Ç"))
+    pattern[pattern=="Ç"] <- "ç"
+  symbols <- c(
+    acute = "áéíóúÁÉÍÓÚýÝ",
+    grave = "àèìòùÀÈÌÒÙ",
+    circunflex = "âêîôûÂÊÎÔÛ",
+    tilde = "ãõÃÕñÑ",
+    umlaut = "äëïöüÄËÏÖÜÿ",
+    cedil = "çÇ"
+  )
+  nudeSymbols <- c(
+    acute = "aeiouAEIOUyY",
+    grave = "aeiouAEIOU",
+    circunflex = "aeiouAEIOU",
+    tilde = "aoAOnN",
+    umlaut = "aeiouAEIOUy",
+    cedil = "cC"
+  )
+  accentTypes <- c("´","`","^","~","¨","ç")
+  if(any(c("all","al","a","todos","t","to","tod","todo")%in%pattern)) # opcao retirar todos
+    return(chartr(paste(symbols, collapse=""), paste(nudeSymbols, collapse=""), str))
+  for(i in which(accentTypes%in%pattern))
+    str <- chartr(symbols[i],nudeSymbols[i], str)
+  return(str)
+}
+
+#### Início da Função para retirar os Acentos ####
+
+# Utilizando a Função "rm_accent" para retirar os acentos e criar vetor com valores tratados
+teste_sem_acento <- rm_accent(Empregos2018[,2])
+
+class(teste_sem_acento)
+
+df_teste_sem_acento <- data.frame(teste_sem_acento)
+
+# Subistituindo a coluna sem os acentos no Data Frame original
+Empregos2018[,2] <- df_teste_sem_acento
+
+Receita20102019 <- read.csv2('Dropbox/Mestrado/Dados/PE_dados_icms_ipva_2010-2019.csv')
+Receita2018 <- Receita20102019[,c(2,3,4,5,14,24)]
+
+EmpregoReceita2018 <- left_join(Receita2018, Empregos2018, by = c('municipio' = 'X1'))
