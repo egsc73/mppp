@@ -1,0 +1,34 @@
+# ATIVIDADE-AULA DE 16 DE AGOSTO DE 2022
+# PROFESSOR HUGO AUGUSTO
+
+
+# Direcionado o R para o Diretorio a ser trabalhado
+setwd('C:/Users/egome/Dropbox/Mestrado/Dados') # NO WINDOWS notebook ACER
+# setwd('C:/Users/0866/Dropbox/Mestrado/Dados') # NO WINDOWS notebook TCE
+# setwd ("/home/eder/Dropbox/Mestrado/Dados") # NO LINUX
+
+#setwd('C:/Users/egome') # NO WINDOWS notebook ACER
+#setwd('C:/Users/0866') # NO WINDOWS notebook TCE
+#setwd ("/home/eder") # NO LINUX
+
+# Conferindo se o diretorio de trabalho do R esta direcionado corretamente
+getwd()
+
+# Limpa o Ambiente Global
+
+rm(list=ls())
+
+# distribuição normal simulada
+distNormal <- rnorm(200) # usa a função rnorm para criar uma distribuição normal, 
+# indicando o total de casos
+
+summary(distNormal) # sumário da distNormal
+
+# distribuição binomial simulada
+distBinominal <- rbinom(200, 1, 0.05) 
+# rbinom para criar distribuição binominal, indicando casos, tamanho e probabilidade
+
+# sequências
+indeximpar <- seq(1, length(distNormal)) # índice 
+indeximpar <- seq(1, length(distNormal), 2) # índice de números impares
+
