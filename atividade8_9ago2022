@@ -1,0 +1,48 @@
+# ATIVIDADE-AULA DE 9 DE AGOSTO DE 2022
+# PROFESSOR HUGO AUGUSTO
+
+
+# Direcionado o R para o Diretorio a ser trabalhado
+# setwd('C:/Users/egome/Dropbox/Mestrado/Dados') # NO WINDOWS notebook ACER
+# setwd('C:/Users/0866/Dropbox/Mestrado/Dados') # NO WINDOWS notebook TCE
+# setwd ("/home/eder/Dropbox/Mestrado/Dados") # NO LINUX
+
+setwd('C:/Users/egome') # NO WINDOWS notebook ACER
+setwd('C:/Users/0866') # NO WINDOWS notebook TCE
+setwd ("/home/eder") # NO LINUX
+
+# Conferindo se o diretorio de trabalho do R esta direcionado corretamente
+getwd()
+
+# Limpa o Ambiente Global
+
+rm(list=ls())
+
+# carregando pacotes
+if(!require(dplyr)) install.packages("dplyr") # Read, Write and Edit xlsx Files
+if(!require(tidyverse)) install.packages("tidyverse") # Read, Write and Edit xlsx Files
+if(!require(funModeling)) install.packages("funModeling") # Read, Write and Edit xlsx Files
+if(!require(data.table)) install.packages("data.table") # Read, Write and Edit xlsx Files
+
+general_data <- fread("https://covid.ourworldindata.org/data/owid-covid-data.csv") # carrega dados de covid19 no mundo
+
+# vetor que identifica países do Mercosul
+mercosul_countries <-c("Argentina", "Brazil", "Bolivia", "Chile", "Colombia", 
+                         "Ecuador", "Guyana", "Paraguay", "Peru", "Suriname", 
+                         "Uruguay", "Venezuela") 
+
+# seleciona casos no vetor (recorte por linha), da lista criada
+mercosul <- general_data %>% filter(location %in% mercosul_countries) 
+
+# cria matriz dos países, agrupando por local, criando uma nova linha com 
+# index e selecionando apenas algumas variáveis
+msul <- mercosul %>% group_by(location) %>% mutate(row = row_number()) %>% 
+  select(location, new_deaths, row) 
+
+# filtra dados para garantir que todos os países tenham mesmo nro de casos
+result <- msul %>% group_by(location) %>% filter(row == max(row))
+msul <- msul %>% filter(row<=min(result$row)) 
+
+# pivota o data frame de long para wide
+msulw <- msul %>% pivot_wider(names_from = row, values_from = new_deaths) %>% 
+  remove_rownames %>% column_to_rownames(var="location") 
