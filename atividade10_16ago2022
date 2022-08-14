@@ -1,0 +1,52 @@
+# ATIVIDADE_10 - AULA DE 16 DE AGOSTO DE 2022
+# PROFESSOR HUGO AUGUSTO
+
+
+#setwd('C:/Users/egome') # NO WINDOWS notebook ACER
+#setwd('C:/Users/0866') # NO WINDOWS notebook TCE
+#setwd ("/home/eder") # NO LINUX
+
+# Conferindo se o diretorio de trabalho do R esta direcionado corretamente
+getwd()
+
+# Limpa o Ambiente Global
+rm(list=ls())
+
+# importando dados
+# Direcionado o R para o Diretorio a ser trabalhado
+setwd('C:/Users/egome/Dropbox/Mestrado/Dados') # NO WINDOWS notebook ACER
+setwd('C:/Users/0866/Dropbox/Mestrado/Dados') # NO WINDOWS notebook TCE
+setwd ("/home/eder/Dropbox/Mestrado/Dados") # NO LINUX
+
+Receita20102019 <- read.csv2('PE_dados_icms_ipva_2010-2019.csv')
+ReceitaIpva2018 <- Receita20102019[,c(2,3,4,5,24)]
+# fonte dos dados: https://www.dropbox.com/s/vs2xm5kk2o5v0i9/PE_dados_icms_ipva_2010-2019.csv?dl=0
+
+# amostragem com reposição usando função sample
+sample(ReceitaIpva2018$ipva18, 15, replace = TRUE)
+
+# bootstraping com função replicate
+set.seed(412) # agora, não vamos mais usar como tarefa mas como execução ponto a ponto
+
+bootsIpva2018_10 <- replicate(10, sample(ReceitaIpva2018$ipva18, 10, replace = TRUE)) 
+# replicamos 10x a amostra, criando assim um bootstrapping
+bootsIpva2018_10
+
+# calculando uma estatística com bootstrapping (10 amostras)
+mediabootsIpva2018_10 <- replicate(10, mean(sample(ReceitaIpva2018$ipva18, 10, replace = TRUE))) # calculamos a média de 10 amostras de 10 casos
+mediabootsIpva2018_50 <- replicate(50, mean(sample(ReceitaIpva2018$ipva18, 10, replace = TRUE))) # calculamos a média de 50 amostras de 10 casos
+mediabootsIpva2018_100 <- replicate(100, mean(sample(ReceitaIpva2018$ipva18, 10, replace = TRUE))) # calculamos a média de 100 amostras de 10 casos
+
+# vamos comparar???
+mean(mediabootsIpva2018_10) # media do boostraping 10
+mean(mediabootsIpva2018_50) # media do boostraping 50
+mean(mediabootsIpva2018_100) # media do boostraping 100
+mean(ReceitaIpva2018$ipva18) # media dos dados originais
+
+# partições
+if(!require(caret)) install.packages("caret") # caret é um pacote geral de machine learning # se já tiver não, innstale =D
+
+# primeiro, criamos as partições de dados
+particaoReceitaIpva18 <- createDataPartition(1:length(ReceitaIpva2018$ipva18), p=.7) # passamos o tamanho do vetor e o parâmetro de divisão
+treinoPartRecIpva <- ReceitaIpva2018$ipva18[unlist(particaoReceitaIpva18)] # criamos uma partição para treinar os dados, usando a partição anterior. Atenção: o comando unlist é muito usado para transformar uma lista num vetor
+testePartRecIpva <- ReceitaIpva2018$ipva18[- unlist(particaoReceitaIpva18)] # criamos uma partição para testar os dados, usando a partição anterior. Atenção: o comando unlist é muito usado para transformar uma lista num vetor
