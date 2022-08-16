@@ -1,19 +1,64 @@
-# importando dados
+# ATIVIDADE-AULA 02
+# 16 DE AGOSTO DE 2022
+# PROFESSOR HUGO AUGUSTO
+
+
+# Direcionado o R para o Diretorio a ser trabalhado
+# setwd('C:/Users/egome/Dropbox/Mestrado/Dados') # NO WINDOWS notebook ACER
+setwd('C:/Users/0866/Dropbox/Mestrado/Dados') # NO WINDOWS notebook TCE
+# setwd ("/home/eder/Dropbox/Mestrado/Dados") # NO LINUX
+
+getwd()
 
 if(!require(openxlsx)) install.packages("openxlsx") # Read, Write and Edit xlsx Files
-
-pibpebruto <- read.xlsx('Produto Interno Bruto valores correntes Brasil Grandes Regioes e Unidades da Federacao 2010a2019.xlsx', 
+pibbruto <- read.xlsx('Produto Interno Bruto valores correntes Brasil Grandes Regioes e Unidades da Federacao 2010a2019.xlsx', 
                         sheet = "Tabela1", colNames = TRUE) 
-                        # link para arquivo-fonte: https://www.dropbox.com/scl/fi/4evpxuslvx1sw4jjh7ki3/Produto-Interno-Bruto-valores-correntes-Brasil-Grandes-Regioes-e-Unidades-da-Federacao-2010a2019.xlsx?dl=0&rlkey=eik2b0ul6lw0s9uexe7e5o7y2
+# link para arquivo-fonte: https://www.dropbox.com/scl/fi/4evpxuslvx1sw4jjh7ki3/Produto-Interno-Bruto-valores-correntes-Brasil-Grandes-Regioes-e-Unidades-da-Federacao-2010a2019.xlsx?dl=0&rlkey=eik2b0ul6lw0s9uexe7e5o7y2
 
-# recorte do pib brasileiro 2010 a 2019
-pibpe <- pibpebruto[-(1:15),]
-pibpe <- pibpe[-(2:19),]
-pibpe <- pibpe[,-(1)]
-PibPE <- t(pibpe) # transpondo o resultado (de linha para coluna)
-colnames(PibPE) <- c("PibPE")
-summary(PibPE)
-sdPibPE <- sd(PibPE) # calcula desvio-padrão da série
-VarPibPE <- var(PibPE) # calcula variância
-cvPibPE <- (sdPibPE/mean(PibPE)) # calcula coeficente de variação (desvio-padrão divido pela média)
-View(cvPibPE) # 0.2177031 - Indica um coeficiente de variação de 21,77%
+# selecionado estado de Pernambuco
+if(!require(dplyr)) install.packages("dplyr") # Read, Write and Edit xlsx Files
+
+nordeste <-c("Alagoas", "Bahia", "Ceará", "Maranhão", "Paraíba", "Pernambuco", 
+             "Piauí", "Rio Grande do Norte", "Sergipe") 
+
+pibne <- pibbruto %>% filter(X1 %in% nordeste) 
+
+PibNE <- t(pibne) # transpondo o resultado (de linha para coluna)
+
+cabeca <- PibNE[1,]
+
+colnames(PibNE) <- cabeca
+
+PibNE <- PibNE[-1,]
+
+class(PibNE)
+summary(PibNE)
+sdPibNE <- sd(PibNE)
+sdPibNE
+VarPibNE <- var(PibNE)
+VarPibNE
+desvpadPibNE <- sd(PibNE) # calcula desvio-padrao da serie
+desvpadPibNE
+VarianciaPibNE <- var(PibNE)
+VarianciaPibNE
+
+# calcula média e mediana
+numPibNE <- as.numeric(as.matrix(PibNE))
+class(numPibNE)
+mediaPibNE <- mean(numPibNE)
+medianaPibNE <- median(numPibNE)
+
+# Calcula coeficiente de variação
+coefvariacaoPibNE <- (sdPibNE/mediaPibNE) # calcula coeficente de variacao (desvio-padrao divido pela media)
+coefvariacaoPibNE
+
+# concatena e resume estatísticas
+summaryPibNE <- cbind(mediaPibNE, medianaPibNE, desvpadPibNE,
+                      coefvariacaoPibNE)
+summaryPibNE
+
+# centralização dos dados
+PibNECentral <- as.numeric(PibNE) - mediaPibNE
+hist(as.numeric(PibNE))
+hist(PibNECentral)
+
