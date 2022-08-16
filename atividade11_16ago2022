@@ -1,0 +1,69 @@
+# ATIVIDADE-AULA 11
+# 16 DE AGOSTO DE 2022
+# PROFESSOR HUGO AUGUSTO
+
+
+# Direcionado o R para o Diretorio a ser trabalhado
+# setwd('C:/Users/egome/Dropbox/Mestrado/Dados') # NO WINDOWS notebook ACER
+setwd('C:/Users/0866/Dropbox/Mestrado/Dados') # NO WINDOWS notebook TCE
+# setwd ("/home/eder/Dropbox/Mestrado/Dados") # NO LINUX
+
+getwd()
+
+if(!require(openxlsx)) install.packages("openxlsx") # Read, Write and Edit xlsx Files
+pibbruto <- read.xlsx('Produto Interno Bruto valores correntes Brasil Grandes Regioes e Unidades da Federacao 2010a2019.xlsx', 
+                        sheet = "Tabela1", colNames = TRUE) 
+# link para arquivo-fonte: https://www.dropbox.com/scl/fi/4evpxuslvx1sw4jjh7ki3/Produto-Interno-Bruto-valores-correntes-Brasil-Grandes-Regioes-e-Unidades-da-Federacao-2010a2019.xlsx?dl=0&rlkey=eik2b0ul6lw0s9uexe7e5o7y2
+
+# selecionado estado de Pernambuco
+if(!require(dplyr)) install.packages("dplyr") # Read, Write and Edit xlsx Files
+
+nordeste <-c("Alagoas", "Bahia", "Ceará", "Maranhão", "Paraíba", "Pernambuco", 
+             "Piauí", "Rio Grande do Norte", "Sergipe") 
+
+pibne <- pibbruto %>% filter(X1 %in% nordeste) 
+
+PibNE <- t(pibne) # transpondo o resultado (de linha para coluna)
+
+cabeca <- PibNE[1,]
+
+colnames(PibNE) <- cabeca
+
+PibNE <- PibNE[-1,]
+
+class(PibNE)
+summary(PibNE)
+
+
+### Estatística Descritiva com R
+
+# visualizando dados da base de dados nativa do R "mtcars"
+View(mtcars)
+
+## Tabela de frequência absoluta da variável consumo (milhas por galão - mpg) 
+table(mtcars$mpg)
+
+## Tabela de frequência relativa da variável "mpg"
+prop.table(table(mtcars$mpg))
+
+## Médias das variáveis "mpg" e "hp" (potência) 
+mean(mtcars$mpg)
+mean(mtcars$hp)
+
+## Mediana da variável "hp"
+median(mtcars$hp)
+
+## Separatrizes da variável "ho" da base mtcars
+quantile(mtcars$hp, probs=0.75)
+quantile(mtcars$hp, probs=0.10)
+quantile(mtcars$hp, probs=0.95)
+
+## Desvio-padrão da variável "hp"
+sd(mtcars$hp)
+
+## Sumário descritivo básico das variáveis
+summary(mtcars)
+
+## Sumário descritivo completo das variáveis usando o pacote fBasics
+pacman::p_load(fBasics)
+basicStats(mtcars[ , c(1:8)])
