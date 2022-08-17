@@ -1,0 +1,42 @@
+# ATIVIDADE-AULA 13
+# 23 DE AGOSTO DE 2022
+# PROFESSOR HUGO AUGUSTO
+
+
+# Direcionado o R para o Diretorio a ser trabalhado
+# setwd('C:/Users/egome/Dropbox/diretorio-r') # NO WINDOWS notebook ACER
+setwd('C:/Users/0866/Dropbox/diretorio-r') # NO WINDOWS notebook TCE
+# setwd ("/home/eder/Dropbox/diretorio-r") # NO LINUX
+
+# checa diretorio de trabalho
+getwd()
+
+# limpa ambiente global
+rm(list=ls())
+
+# PACOTES NECESSÁRIOS
+if(!require(data.table)) install.packages("data.table") # file reader and writer, aggregations, updates, equi, non-equi, rolling, range and interval joins, in a short and flexible syntax, for faster development.
+if(!require(tidyverse)) install.packages("tidyverse") # The tidyverse package is designed to make it easy to install and load core packages from the tidyverse in a single command.
+if(!require(dplyr)) install.packages("dplyr") # dplyr is a grammar of data manipulation, providing a consistent set of verbs that help you solve the most common data manipulation challenges
+if(!require(validate)) install.packages("validate") # Test if a string contains valid JSON. Characters vectors will be collapsed into a single string.
+
+general_data <- fread("https://covid.ourworldindata.org/data/owid-covid-data.csv") # carrega dados de covid19 no mundo
+
+# vetor que identifica países do Mercosul
+mercosul_countries <-c("Argentina", "Brazil", "Bolivia", "Chile", "Colombia", 
+                       "Ecuador", "Guyana", "Paraguay", "Peru", "Suriname", 
+                       "Uruguay", "Venezuela") 
+
+# seleciona casos no vetor (recorte por linha), da lista criada
+mercosul <- general_data %>% filter(location %in% mercosul_countries) 
+
+mercosul <- mercosul %>% select(location, new_cases, new_deaths)
+
+regras_mercosul <- validator(new_cases >= 0, new_deaths >= 0)
+
+validacao_mercosul <- confront(mercosul, regras_mercosul)
+
+summary(validacao_mercosul)
+
+plot(validacao_mercosul)
+
