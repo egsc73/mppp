@@ -1,0 +1,23 @@
+# ATIVIDADE-AULA 12
+# 23 DE AGOSTO DE 2022
+# PROFESSOR HUGO AUGUSTO
+
+
+# Direcionado o R para o Diretorio a ser trabalhado
+# setwd('C:/Users/egome/Dropbox/diretorio-r') # NO WINDOWS notebook ACER
+setwd('C:/Users/0866/Dropbox/diretorio-r') # NO WINDOWS notebook TCE
+# setwd ("/home/eder/Dropbox/diretorio-r") # NO LINUX
+
+# checa diretorio de trabalho
+getwd()
+
+# PACOTES NECESSÁRIOS
+if(!require(funModeling)) install.packages("funModeling") # Read, Write and Edit xlsx Files
+if(!require(tidyverse)) install.packages("tidyverse") # Read, Write and Edit xlsx Files
+
+
+glimpse(mtcars) # olhada nos dados
+status(mtcars) # estrutura dos dados (missing etc)
+freq(mtcars) # frequência das variáveis fator
+plot_num(mtcars) # exploração das variáveis numéricas
+profiling_num(mtcars) # estatísticas das variáveis numéricas
