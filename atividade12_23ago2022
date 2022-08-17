@@ -12,8 +12,8 @@ setwd('C:/Users/0866/Dropbox/diretorio-r') # NO WINDOWS notebook TCE
 getwd()
 
 # PACOTES NECESSÁRIOS
-if(!require(funModeling)) install.packages("funModeling") # Read, Write and Edit xlsx Files
-if(!require(tidyverse)) install.packages("tidyverse") # Read, Write and Edit xlsx Files
+if(!require(funModeling)) install.packages("funModeling") # Exploratory data analysis, data preparation and model performance
+if(!require(tidyverse)) install.packages("tidyverse") # The tidyverse package is designed to make it easy to install and load core packages from the tidyverse in a single command.
 
 
 glimpse(mtcars) # olhada nos dados
