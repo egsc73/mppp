@@ -1,0 +1,44 @@
+# ATIVIDADE-AULA 14
+# 23 DE AGOSTO DE 2022
+# PROFESSOR HUGO AUGUSTO
+
+
+# Direcionado o R para o Diretorio a ser trabalhado
+# setwd('C:/Users/egome/Dropbox/diretorio-r') # NO WINDOWS notebook ACER
+# setwd('C:/Users/0866/Dropbox/diretorio-r') # NO WINDOWS notebook TCE
+setwd ("/home/eder/Dropbox/diretorio-r") # NO LINUX
+
+# checa diretorio de trabalho
+getwd()
+
+# limpa ambiente global
+rm(list=ls())
+
+# PACOTES #
+if(!require(pacman)) install.packages("pacman") # pacman conveniently wraps library and package related functions and names them in an intuitive and consistent fashion
+
+# pacman::p_load(data.table) # package ‘pacman’ is not available (for R version 3.4.4)
+if(!require(data.table)) install.packages("data.table") # pacman conveniently wraps library and package related functions and names them in an intuitive and consistent fashion
+
+# CARREGANDO OS DADOS #
+dados <- mtcars
+  
+# TESTE DE CORRELAÇÃO DE PEARSON
+cor.test(mtcars$wt, mtcars$hp) # verifica a ocorrencia ou não de correlação entre
+# o tamanho/peso do veículo com a potencia # a expectativa é que seja positiva a correlação
+
+cor.test(mtcars$wt, mtcars$mpg) # verifica a ocorrencia ou não de correlação entre
+# o tamanho/peso do veículo com o consumo # a expectativa é que seja negativa a correlação
+
+# H0: variáveis são independentes / não têm associação. p-valor (p-value) > 0.05
+# H1: variáveis são dependentes / há associação. p-valor (p-value) <= 0.05
+
+# TESTE QUI-QUADRADO
+chisq.test(mtcars$vs, mtcars$am)
+# verifica se há asociaçao entre tipo de transmissão (automática ou manual) em relação
+# ao tipo de motor (cilindros em V ou perpendiculares - "em pé") 
+# a expectativa é que não existe associação signicativa
+
+# H0: variáveis são independentes / não têm associação. p-valor (p-value) > 0.05
+# H1: variáveis são dependentes / há associação. p-valor (p-value) <= 0.05
+
