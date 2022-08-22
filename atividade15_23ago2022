@@ -28,7 +28,7 @@ cor.test(mtcars$wt, mtcars$hp) # verifica a ocorrencia ou não de correlação e
 # o tamanho/peso do veículo com a potencia # a expectativa é que seja positiva a correlação
 
 cor.test(mtcars$wt, mtcars$mpg) # verifica a ocorrencia ou não de correlação entre
-# o tamanho/peso do veículo com o consumo # a expectativa é que seja negativa a correlação
+# o tamanho/peso do veículo com a autonomia # a expectativa é que seja negativa a correlação
 
 # H0: variáveis são independentes / não têm associação. p-valor (p-value) > 0.05
 # H1: variáveis são dependentes / há associação. p-valor (p-value) <= 0.05
