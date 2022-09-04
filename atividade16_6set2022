@@ -1,0 +1,53 @@
+# ATIVIDADE-AULA 16
+# 06 DE SETEMBRO DE 2022
+# PROFESSOR HUGO AUGUSTO
+
+
+# Direcionado o R para o Diretorio a ser trabalhado
+setwd('C:/Users/egome/Dropbox/diretorio-r') # NO WINDOWS notebook DELL
+# setwd('C:/Users/egome/Dropbox/diretorio-r') # NO WINDOWS notebook ACER
+# setwd('C:/Users/0866/Dropbox/diretorio-r') # NO WINDOWS notebook TCE
+# setwd ("/home/eder/Dropbox/diretorio-r") # NO LINUX
+
+# checa diretorio de trabalho
+getwd()
+
+# limpa ambiente global
+rm(list=ls())
+
+# PACOTES #
+if(!require(pacman)) install.packages("pacman") # pacman conveniently wraps library and package related functions and names them in an intuitive and consistent fashion
+
+# pacman::p_load(data.table) # package ‘pacman’ is not available (for R version 3.4.4)
+# if(!require(data.table)) install.packages("data.table") # pacman conveniently wraps library and package related functions and names them in an intuitive and consistent fashion
+
+# CARREGANDO OS DADOS
+dados <- mtcars
+  
+## CORRELACAO COM R
+# SCRIPT EXECUTADO NO R-3.5.2
+
+# PRIMEIRO, VAMOS CARREGAR OS PACOTES
+pacman::p_load(corrplot, dplyr, ggplot2)
+
+# SELECIONA VARIAVEIS PARA ANALISE 
+mtcars2 <- mtcars[,(1:6)] 
+# [, 1]	mpg	Miles/(US) gallon
+# [, 2]	cyl	Number of cylinders
+# [, 3]	disp	Displacement (cu.in.)
+# [, 4]	hp	Gross horsepower
+# [, 5]	drat	Rear axle ratio
+# [, 6]	wt	Weight (1000 lbs)
+
+# TABELA DE CORRELACAO COM TODAS AS VARIAVEIS 
+cor(mtcars2)
+
+# GRAFICOS DE DISPERSAO PAREADOS DAS VARIAVEIS 
+pairs(mtcars2)
+
+# CORRPLOT DAS VARIAVEIS 
+mtcars2Cor <- cor(mtcars2)
+corrplot(mtcars2Cor, method = "number", order = 'alphabet')
+corrplot(mtcars2Cor, order = 'alphabet') 
+
+corrplot(mtcars2Cor, method = "pie", order = 'alphabet')
