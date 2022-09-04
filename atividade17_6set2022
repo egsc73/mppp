@@ -1,0 +1,58 @@
+# ATIVIDADE-AULA 16
+# 06 DE SETEMBRO DE 2022
+# PROFESSOR HUGO AUGUSTO
+
+
+# Direcionado o R para o Diretorio a ser trabalhado
+setwd('C:/Users/egome/Dropbox/diretorio-r') # NO WINDOWS notebook DELL
+# setwd('C:/Users/egome/Dropbox/diretorio-r') # NO WINDOWS notebook ACER
+# setwd('C:/Users/0866/Dropbox/diretorio-r') # NO WINDOWS notebook TCE
+# setwd ("/home/eder/Dropbox/diretorio-r") # NO LINUX
+
+# checa diretorio de trabalho
+getwd()
+
+# limpa ambiente global
+rm(list=ls())
+
+## QUI-QUADRADO COM R-4.2.1
+
+# PRIMEIRO, VAMOS CARREGAR OS PACOTES
+pacman::p_load(data.table, ggplot2, curl, corrplot)
+
+# AGORA, A BASE DE DADOS CAR EVALUATION 
+breast_cancer <- fread('https://raw.githubusercontent.com/hugoavmedeiros/cp_com_r/master/bases_tratadas/breast_cancer.csv', stringsAsFactors = T)
+# breast_cancer <- fread('bases_tratadas/breast_cancer.csv', stringsAsFactors = T)
+
+# TABELA DE CONTINGÊNCIA 
+breast_cancer_table <- table(breast_cancer$idade, breast_cancer$tumor_tamanho)
+breast_cancer_table
+
+# TABELA DE CONTINGÊNCIA # 2
+breast_cancer_table2 <- table(breast_cancer$idade, breast_cancer$breast)
+breast_cancer_table2
+
+# GRÁFICOS DE DISPERSÃO PAREADOS DAS VARIÁVEIS #
+ggplot(breast_cancer) + aes(x = tumor_tamanho, fill = idade) + geom_bar(position = "fill")
+
+# GRÁFICOS DE DISPERSÃO PAREADOS DAS VARIÁVEIS # 2
+ggplot(breast_cancer) + aes(x = breast, fill = idade) + geom_bar(position = "fill")
+
+
+# TESTE QUI QUADRADO #
+breast_cancer_test <- chisq.test(breast_cancer_table)
+breast_cancer_test
+breast_cancer_test$observed
+breast_cancer_test$expected
+
+# TESTE QUI QUADRADO # 2
+breast_cancer_test2 <- chisq.test(breast_cancer_table2)
+breast_cancer_test2
+breast_cancer_test2$observed
+breast_cancer_test2$expected
+
+# CORRPLOT DAS VARIÁVEIS #
+corrplot(breast_cancer_test$residuals, is.cor = FALSE)
+
+# CORRPLOT DAS VARIÁVEIS # 2
+corrplot(breast_cancer_test2$residuals, is.cor = FALSE)
