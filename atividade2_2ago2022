@@ -58,6 +58,7 @@ summaryPibNE <- cbind(mediaPibNE, medianaPibNE, desvpadPibNE,
 summaryPibNE
 
 # centralização dos dados
+# A centralização de dados corresponde à subtração dos dados amostrais de cada variável, da sua média amostral ou outro valor característico.
 PibNECentral <- as.numeric(PibNE) - mediaPibNE
 hist(as.numeric(PibNE))
 hist(PibNECentral)
